@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán – Shop Secondhand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: #0f0902;
+            color: #f5ede0;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── HEADER ── */
+        .co-header {
+            padding: 18px 40px;
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid rgba(200,146,42,0.2);
+            background: rgba(10,6,1,0.98);
+        }
+        .co-logo { font-family: 'Playfair Display', serif; font-size: 20px; color: #c8922a; text-decoration: none; letter-spacing: 2px; }
+        .co-logo small { display: block; font-size: 9px; letter-spacing: 4px; color: #6a5a45; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 300; }
+        .co-steps { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+        .co-step { padding: 6px 14px; border-radius: 20px; font-weight: 600; letter-spacing: .5px; }
+        .co-step.active { background: #c8922a; color: #1a1209; }
+        .co-step.done { color: #56a870; }
+        .co-step.pending { color: #5a4a35; }
+        .co-sep { color: #3a2a18; font-size: 10px; }
+
+        /* ── LAYOUT ── */
+        .co-layout {
+            max-width: 1100px; margin: 0 auto; padding: 36px 24px;
+            display: grid; grid-template-columns: 1fr 380px; gap: 32px;
+            align-items: start;
+        }
+        @media(max-width:768px){ .co-layout{ grid-template-columns:1fr; } }
+
+        /* ── LEFT: FORM ── */
+        .co-form-section { display: flex; flex-direction: column; gap: 24px; }
+        .co-card {
+            background: rgba(20,12,4,0.95); border: 1px solid rgba(200,146,42,0.18);
+            border-radius: 10px; padding: 24px;
+        }
+        .co-card-title {
+            font-size: 14px; font-weight: 700; color: #c8922a;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            margin-bottom: 20px; padding-bottom: 12px;
+            border-bottom: 1px solid rgba(200,146,42,0.15);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .field { margin-bottom: 14px; }
+        .field label {
+            display: block; font-size: 11px; font-weight: 600;
+            letter-spacing: 1px; text-transform: uppercase; color: #6a5a45; margin-bottom: 6px;
+        }
+        .field input, .field select, .field textarea {
+            width: 100%; padding: 12px 14px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(200,146,42,0.22); border-radius: 6px;
+            color: #f5ede0; font-family: 'Be Vietnam Pro', sans-serif; font-size: 14px;
+            outline: none; transition: all .25s;
+        }
+        .field input:focus, .field select:focus, .field textarea:focus {
+            border-color: #c8922a; background: rgba(200,146,42,0.04);
+            box-shadow: 0 0 0 3px rgba(200,146,42,0.1);
+        }
+        .field input::placeholder, .field textarea::placeholder { color: #4a3a28; }
+        .field select option { background: #1e1408; color: #e8d5b0; }
+        .field textarea { resize: vertical; min-height: 80px; }
+
+        /* ── PAYMENT METHOD ── */
+        .pay-methods { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+        .pay-method {
+            border: 2px solid rgba(200,146,42,0.2); border-radius: 8px; padding: 14px 10px;
+            text-align: center; cursor: pointer; transition: all .25s;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+        }
+        .pay-method:hover { border-color: rgba(200,146,42,0.5); background: rgba(200,146,42,0.04); }
+        .pay-method.selected { border-color: #c8922a; background: rgba(200,146,42,0.08); }
+        .pay-method .pm-icon { font-size: 24px; }
+        .pay-method .pm-name { font-size: 11px; font-weight: 600; letter-spacing: .5px; color: #c8b88a; }
+
+        /* ── RIGHT: ORDER SUMMARY ── */
+        .co-summary { position: sticky; top: 24px; }
+        .co-summary-title {
+            font-size: 14px; font-weight: 700; color: #c8922a;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            margin-bottom: 18px; padding-bottom: 12px;
+            border-bottom: 1px solid rgba(200,146,42,0.15);
+        }
+        .order-items { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .order-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px 0; border-bottom: 1px solid rgba(200,146,42,0.08);
+        }
+        .order-item-img {
+            width: 56px; height: 56px; border-radius: 6px; background: #2a1a08;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; flex-shrink: 0;
+        }
+        .order-item-info { flex: 1; }
+        .order-item-name { font-size: 13px; color: #d0c0a0; font-weight: 500; line-height: 1.4; }
+        .order-item-price { font-size: 13px; color: #c8922a; font-weight: 700; margin-top: 2px; }
+        .order-item-remove {
+            background: none; border: none; color: #5a4a35; cursor: pointer;
+            font-size: 16px; padding: 4px; transition: color .2s;
+        }
+        .order-item-remove:hover { color: #e05a3a; }
+
+        /* Coupon */
+        .coupon-row {
+            display: flex; gap: 8px; margin-bottom: 16px;
+        }
+        .coupon-row input {
+            flex: 1; padding: 10px 14px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(200,146,42,0.22); border-radius: 6px;
+            color: #f5ede0; font-family: 'Be Vietnam Pro', sans-serif; font-size: 13px; outline: none;
+        }
+        .coupon-row button {
+            padding: 10px 18px; background: transparent;
+            border: 1px solid rgba(200,146,42,0.4); border-radius: 6px;
+            color: #c8922a; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s;
+        }
+        .coupon-row button:hover { background: rgba(200,146,42,0.1); }
+
+        .price-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .price-row-item {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 13px; color: #8a7560;
+        }
+        .price-row-item.total {
+            font-size: 18px; font-weight: 700; color: #c8922a;
+            padding-top: 12px; border-top: 1px solid rgba(200,146,42,0.2);
+            font-family: 'Playfair Display', serif;
+        }
+        .price-row-item span:last-child { color: #d0c0a0; }
+        .price-row-item.total span:last-child { color: #c8922a; }
+        .price-row-item.discount span:last-child { color: #56a870; }
+
+        .btn-place-order {
+            width: 100%; padding: 16px;
+            background: #c8922a; color: #1a1209;
+            border: none; border-radius: 8px;
+            font-family: 'Playfair Display', serif;
+            font-size: 16px; font-weight: 700; letter-spacing: 1px;
+            cursor: pointer; transition: all .25s;
+        }
+        .btn-place-order:hover { background: #a8741a; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,146,42,0.3); }
+        .btn-place-order:active { transform: translateY(0); }
+
+        .co-back {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 13px; color: #6a5a45; text-decoration: none; transition: color .2s;
+            margin-top: 14px;
+        }
+        .co-back:hover { color: #c8922a; }
+
+        /* ── TOAST ── */
+        #co-toast {
+            position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+            background: #1a1209; color: #c8922a; padding: 12px 26px; border-radius: 30px;
+            font-size: 14px; font-weight: 600; z-index: 9999;
+            border: 1px solid #c8922a; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            transition: opacity .4s; opacity: 0; pointer-events: none;
+        }
+
+        /* ── SUCCESS OVERLAY ── */
+        #success-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.85); z-index: 9999;
+            align-items: center; justify-content: center;
+        }
+        .success-box {
+            background: #1c1208; border: 1px solid rgba(200,146,42,0.3);
+            border-radius: 16px; padding: 48px 40px; text-align: center; max-width: 440px; width: 90%;
+            animation: pdSlideIn .3s cubic-bezier(.34,1.56,.64,1);
+        }
+        @keyframes pdSlideIn { from{opacity:0;transform:translateY(24px) scale(.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+        .success-icon { font-size: 56px; margin-bottom: 16px; }
+        .success-box h2 { font-family: 'Playfair Display', serif; font-size: 26px; color: #c8922a; margin-bottom: 12px; }
+        .success-box p { font-size: 14px; color: #8a7560; line-height: 1.7; margin-bottom: 24px; }
+        .success-order-id { font-size: 12px; color: #c8922a; background: rgba(200,146,42,0.1); padding: 8px 16px; border-radius: 20px; display: inline-block; margin-bottom: 24px; }
+        .btn-back-home { padding: 13px 32px; background: #c8922a; color: #1a1209; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; transition: background .2s; font-family: 'Be Vietnam Pro', sans-serif; }
+        .btn-back-home:hover { background: #a8741a; }
+    </style>
+</head>
+<body>
+
+<div id="co-toast"></div>
+
+<!-- SUCCESS OVERLAY -->
+<div id="success-overlay" style="display:none;align-items:center;justify-content:center;">
+    <div class="success-box">
+        <div class="success-icon">🎉</div>
+        <h2>Đặt hàng thành công!</h2>
+        <p>Cảm ơn bạn đã tin tưởng Shop Secondhand. Chúng tôi sẽ liên hệ xác nhận đơn hàng trong vòng 30 phút.</p>
+        <div class="success-order-id" id="order-id-display">Mã đơn: #SH2026001</div>
+        <br>
+        <a href="index.html" class="btn-back-home">Tiếp tục mua sắm</a>
+    </div>
+</div>
+
+<!-- HEADER -->
+<div class="co-header">
+    <a href="trangchu.html" class="co-logo">SHOP<small>SECONDHAND</small></a>
+    <div class="co-steps">
+        <span class="co-step done">✓ Giỏ hàng</span>
+        <span class="co-sep">›</span>
+        <span class="co-step active">Thông tin</span>
+        <span class="co-sep">›</span>
+        <span class="co-step pending">Xác nhận</span>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="co-layout">
+
+    <!-- LEFT – FORM -->
+    <div class="co-form-section">
+
+        <!-- THÔNG TIN GIAO HÀNG -->
+        <div class="co-card">
+            <div class="co-card-title">📍 Thông tin giao hàng</div>
+            <div class="field-row">
+                <div class="field">
+                    <label>Họ và tên *</label>
+                    <input type="text" id="co-name" placeholder="Nguyễn Văn A">
+                </div>
+                <div class="field">
+                    <label>Số điện thoại *</label>
+                    <input type="tel" id="co-phone" placeholder="09xxxxxxxx">
+                </div>
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" id="co-email" placeholder="example@email.com">
+            </div>
+            <div class="field-row">
+                <div class="field">
+                    <label>Tỉnh / Thành phố *</label>
+                    <select id="co-city">
+                        <option value="">Chọn tỉnh thành</option>
+                        <option>TP. Hồ Chí Minh</option>
+                        <option>Hà Nội</option>
+                        <option>Đà Nẵng</option>
+                        <option>Bình Dương</option>
+                        <option>Đồng Nai</option>
+                        <option>Cần Thơ</option>
+                        <option>Khác</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Quận / Huyện *</label>
+                    <input type="text" id="co-district" placeholder="Quận/Huyện">
+                </div>
+            </div>
+            <div class="field">
+                <label>Địa chỉ cụ thể *</label>
+                <input type="text" id="co-address" placeholder="Số nhà, tên đường, phường/xã...">
+            </div>
+            <div class="field">
+                <label>Ghi chú (tùy chọn)</label>
+                <textarea id="co-note" placeholder="Ghi chú cho shop: giao giờ hành chính, để trước cổng..."></textarea>
+            </div>
+        </div>
+
+        <!-- PHƯƠNG THỨC THANH TOÁN -->
+        <div class="co-card">
+            <div class="co-card-title">💳 Phương thức thanh toán</div>
+            <div class="pay-methods">
+                <div class="pay-method selected" data-pay="cod" onclick="selectPay(this)">
+                    <div class="pm-icon">💵</div>
+                    <div class="pm-name">COD<br><span style="font-size:9px;color:#6a5a45;">Thanh toán khi nhận</span></div>
+                </div>
+                <div class="pay-method" data-pay="momo" onclick="selectPay(this)">
+                    <div class="pm-icon">💜</div>
+                    <div class="pm-name">MoMo</div>
+                </div>
+                <div class="pay-method" data-pay="vnpay" onclick="selectPay(this)">
+                    <div class="pm-icon">🏦</div>
+                    <div class="pm-name">VNPay</div>
+                </div>
+                <div class="pay-method" data-pay="zalopay" onclick="selectPay(this)">
+                    <div class="pm-icon">💙</div>
+                    <div class="pm-name">ZaloPay</div>
+                </div>
+                <div class="pay-method" data-pay="atm" onclick="selectPay(this)">
+                    <div class="pm-icon">💳</div>
+                    <div class="pm-name">Thẻ ATM</div>
+                </div>
+                <div class="pay-method" data-pay="shopee" onclick="selectPay(this)">
+                    <div class="pm-icon">🧡</div>
+                    <div class="pm-name">ShopeePay</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT – ORDER SUMMARY -->
+    <div class="co-summary">
+        <div class="co-card">
+            <div class="co-summary-title">🛒 Đơn hàng của bạn</div>
+            <div class="order-items" id="order-items-list">
+                <!-- JS render -->
+                <div style="color:#5a4a35;font-size:13px;text-align:center;padding:16px 0;">Đang tải giỏ hàng...</div>
+            </div>
+
+            <!-- Coupon -->
+            <div class="coupon-row">
+                <input type="text" id="coupon-input" placeholder="Nhập mã ưu đãi (APR60, APR90)">
+                <button onclick="applyCoupon()">Áp dụng</button>
+            </div>
+
+            <!-- Price breakdown -->
+            <div class="price-rows">
+                <div class="price-row-item">
+                    <span>Tạm tính</span>
+                    <span id="subtotal-val">0đ</span>
+                </div>
+                <div class="price-row-item discount" id="discount-row" style="display:none;">
+                    <span>Giảm giá</span>
+                    <span id="discount-val">-0đ</span>
+                </div>
+                <div class="price-row-item">
+                    <span>Phí vận chuyển</span>
+                    <span id="ship-val">Miễn phí</span>
+                </div>
+                <div class="price-row-item total">
+                    <span>Tổng cộng</span>
+                    <span id="total-val">0đ</span>
+                </div>
+            </div>
+
+            <button class="btn-place-order" onclick="placeOrder()">Đặt hàng ngay →</button>
+            <a href="index.html" class="co-back">← Quay lại cửa hàng</a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+let cartData = [];
+let subtotal = 0;
+let discount = 0;
+let selectedPay = 'cod';
+
+/* ── LOAD CART ── */
+(function(){
+    const raw = localStorage.getItem('sh_cart');
+    if(raw){
+        try{
+            const d = JSON.parse(raw);
+            cartData = d.items || d || [];
+            if(!Array.isArray(cartData)) cartData=[];
+            subtotal = cartData.reduce((s,i)=>s+i.price,0);
+        } catch(e){ cartData=[]; }
+    }
+    renderOrderItems();
+    updatePrices();
+})();
+
+function renderOrderItems(){
+    const el = document.getElementById('order-items-list');
+    if(!cartData.length){
+        el.innerHTML='<div style="color:#5a4a35;font-size:13px;text-align:center;padding:16px 0;">Giỏ hàng trống. <a href="trangchu.html" style="color:#c8922a;">Quay lại mua sắm</a></div>';
+        return;
+    }
+    el.innerHTML = cartData.map((item,i)=>`
+        <div class="order-item">
+            <div class="order-item-img">👕</div>
+            <div class="order-item-info">
+                <div class="order-item-name">${item.name}</div>
+                <div class="order-item-price">${item.price.toLocaleString('vi-VN')}đ</div>
+            </div>
+            <button class="order-item-remove" onclick="removeItem(${i})">✕</button>
+        </div>`).join('');
+}
+
+function removeItem(i){
+    cartData.splice(i,1);
+    subtotal = cartData.reduce((s,it)=>s+it.price,0);
+    renderOrderItems();
+    updatePrices();
+    localStorage.setItem('sh_cart', JSON.stringify({items:cartData, total:subtotal}));
+}
+
+function updatePrices(){
+    document.getElementById('subtotal-val').textContent = subtotal.toLocaleString('vi-VN')+'đ';
+    document.getElementById('total-val').textContent = Math.max(0,subtotal-discount).toLocaleString('vi-VN')+'đ';
+    const ship = subtotal >= 399000 ? 'Miễn phí' : '30.000đ';
+    document.getElementById('ship-val').textContent = ship;
+}
+
+function applyCoupon(){
+    const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+    if(code==='APR60' && subtotal>=799000){ discount=60000; showToast('✅ Áp dụng mã APR60 – Giảm 60.000đ'); }
+    else if(code==='APR90' && subtotal>=1099000){ discount=90000; showToast('✅ Áp dụng mã APR90 – Giảm 90.000đ'); }
+    else { discount=0; showToast('⚠️ Mã không hợp lệ hoặc chưa đủ điều kiện!'); return; }
+    const row=document.getElementById('discount-row');
+    row.style.display='flex';
+    document.getElementById('discount-val').textContent='-'+discount.toLocaleString('vi-VN')+'đ';
+    updatePrices();
+}
+
+function selectPay(el){
+    document.querySelectorAll('.pay-method').forEach(m=>m.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPay = el.dataset.pay;
+}
+
+function placeOrder(){
+    const name    = document.getElementById('co-name').value.trim();
+    const phone   = document.getElementById('co-phone').value.trim();
+    const city    = document.getElementById('co-city').value;
+    const district= document.getElementById('co-district').value.trim();
+    const address = document.getElementById('co-address').value.trim();
+
+    if(!name)    { showToast('⚠️ Vui lòng nhập họ và tên!'); return; }
+    if(!phone || !/^(0|\+84)[0-9]{8,10}$/.test(phone)) { showToast('⚠️ Số điện thoại không hợp lệ!'); return; }
+    if(!city)    { showToast('⚠️ Vui lòng chọn tỉnh thành!'); return; }
+    if(!district){ showToast('⚠️ Vui lòng nhập quận/huyện!'); return; }
+    if(!address) { showToast('⚠️ Vui lòng nhập địa chỉ!'); return; }
+    if(!cartData.length){ showToast('⚠️ Giỏ hàng trống!'); return; }
+
+    // Generate order ID
+    const orderId = 'SH' + Date.now().toString().slice(-8);
+    document.getElementById('order-id-display').textContent = 'Mã đơn: #' + orderId;
+
+    // Save order
+    const orders = JSON.parse(localStorage.getItem('sh_orders')||'[]');
+    orders.push({ id:orderId, items:cartData, total:subtotal-discount, name, phone, city, district, address, pay:selectedPay, date: new Date().toLocaleString('vi-VN') });
+    localStorage.setItem('sh_orders', JSON.stringify(orders));
+
+    // Clear cart
+    localStorage.removeItem('sh_cart');
+
+    // Show success
+    const overlay = document.getElementById('success-overlay');
+    overlay.style.display = 'flex';
+}
+
+function showToast(msg){
+    const t=document.getElementById('co-toast');
+    t.textContent=msg; t.style.opacity='1';
+    clearTimeout(t._t);
+    t._t=setTimeout(()=>t.style.opacity='0',2800);
+}
+
+// If cart empty and no data, check login
+const isLogin = localStorage.getItem('isLogin')||localStorage.getItem('sh_current');
+if(!isLogin){ window.location.href='dangnhap.html'; }
+
+// Pre-fill if logged in
+const cur = JSON.parse(localStorage.getItem('sh_current')||'null');
+if(cur){
+    document.getElementById('co-name').value = cur.name || '';
+    document.getElementById('co-email').value = cur.email || '';
+}
+</script>
+</body>
+</html>

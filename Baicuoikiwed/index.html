@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecondHand Shop – Săn Đồ Chất</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Barlow:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: 'Be Vietnam Pro', sans-serif !important; -webkit-font-smoothing: antialiased; }
+        .header-logo-text, .slide-text h2, .section-title h2,
+        .pd-right h2, .pol-box h2, .btn-xem-them { font-family: 'Playfair Display', serif !important; }
+        .category-menu, .category-menu a, .category-menu li,
+        .icon-cat span, .product-info h3,
+        .sort-bar, .footer-col, .footer-col p,
+        .footer-col ul li a, .header-action-item span { font-family: 'Be Vietnam Pro', sans-serif !important; }
+
+        header { transition: transform .4s cubic-bezier(.4,0,.2,1); }
+        .category-menu { transition: transform .4s cubic-bezier(.4,0,.2,1); }
+
+        .category-menu > ul > li:first-child > a {
+            padding-top: 13px !important;
+            padding-right: 42px !important;
+            position: relative;
+        }
+        .badge-new {
+            position: absolute !important;
+            top: 5px !important; right: 8px !important;
+            left: auto !important; transform: none !important;
+            font-size: 8px; font-weight: 800; color: #fff;
+            background: #e05a3a; padding: 1px 5px; border-radius: 3px;
+            font-family: 'Be Vietnam Pro', sans-serif !important;
+            letter-spacing: .5px; text-transform: uppercase;
+            pointer-events: none; white-space: nowrap; z-index: 5;
+        }
+        .thu-mua-item > a {
+            font-family: 'Be Vietnam Pro', sans-serif !important;
+            font-weight: 600 !important; color: #dccba0 !important;
+            display: flex; align-items: center;
+            padding: 13px 14px; text-decoration: none;
+            font-size: 13px; letter-spacing: .5px;
+            transition: color .2s;
+        }
+        .thu-mua-item > a:hover { color: #c8922a !important; }
+
+        /* ═══ ICON CATEGORY ═══ */
+        .icon-cats {
+            display: flex; justify-content: center; gap: 16px;
+            padding: 32px 24px;
+            background: linear-gradient(180deg,rgba(10,6,1,0.97) 0%,rgba(22,13,4,0.95) 100%);
+            border-bottom: 1px solid rgba(200,146,42,0.18);
+            position: relative; z-index: 1;
+        }
+        .icon-cat {
+            position: relative; display: flex; flex-direction: column;
+            align-items: center; gap: 12px; padding: 22px 36px 18px;
+            background: linear-gradient(145deg,#1c1106,#241708);
+            border: 1px solid rgba(200,146,42,0.28); border-radius: 12px;
+            cursor: pointer; transition: all .35s cubic-bezier(.34,1.56,.64,1);
+            color: #c8a060; font-size: 11px; font-weight: 600;
+            letter-spacing: 2px; text-transform: uppercase; min-width: 140px;
+            overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+        }
+        .icon-cat::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg,transparent,#c8922a,transparent);
+            opacity: 0; transition: opacity .35s;
+        }
+        .icon-cat:hover {
+            border-color: rgba(200,146,42,0.75);
+            background: linear-gradient(145deg,#221508,#2e1c09); color: #e8c060;
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.6), 0 0 28px rgba(200,146,42,0.12);
+        }
+        .icon-cat:hover::before { opacity: 1; }
+        .icon-cat-img {
+            width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;
+            transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+        }
+        .icon-cat:hover .icon-cat-img { transform: scale(1.15) translateY(-4px); }
+        .icon-cat-img svg { width: 100%; height: 100%; }
+
+        /* ═══ PRODUCT GRID ═══ */
+        .products-section {
+            padding: 0 0 40px;
+            background: linear-gradient(180deg,#160e04 0%,#1a1108 100%);
+            min-height: 400px; position: relative; z-index: 1;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .section-title { text-align: center; padding: 44px 0 28px; }
+        .section-title h2 { font-size: 34px; color: #f5ede0; letter-spacing: 2px; margin-bottom: 12px; }
+        .section-title .title-rule { width: 56px; height: 2px; background: #c8922a; margin: 0 auto; }
+
+        .sort-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 24px; padding-bottom: 14px;
+            border-bottom: 1px solid rgba(200,146,42,0.15);
+            font-size: 13px; color: #8a7560;
+        }
+        .sort-bar-left { display: flex; align-items: center; gap: 10px; }
+        .sort-bar select {
+            padding: 7px 14px; background: #1e1408;
+            border: 1px solid rgba(200,146,42,0.4); color: #c8b88a;
+            border-radius: 4px; font-size: 13px;
+            font-family: 'Be Vietnam Pro', sans-serif !important;
+            cursor: pointer; outline: none;
+        }
+        .sort-bar select option { background: #1e1408; color: #c8b88a; }
+        .products {
+            display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: 20px;
+        }
+        .product {
+            display: flex; flex-direction: column;
+            background: rgba(18,11,3,0.94); border: 1px solid rgba(200,146,42,0.14);
+            border-radius: 4px; overflow: hidden;
+            transition: all .35s cubic-bezier(.4,0,.2,1); cursor: pointer; position: relative;
+        }
+        .product:hover {
+            transform: translateY(-5px); border-color: rgba(200,146,42,0.5);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+        }
+        .product-img-wrap { position: relative; overflow: hidden; }
+        .product-img-wrap img {
+            width: 100%; height: 280px; object-fit: cover; display: block;
+            transition: transform .55s cubic-bezier(.4,0,.2,1);
+        }
+        .product:hover .product-img-wrap img { transform: scale(1.06); }
+        .product-quick-add {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: rgba(10,6,1,0.92); border-top: 1px solid rgba(200,146,42,0.3);
+            padding: 11px 16px; text-align: center; font-size: 11px; font-weight: 600;
+            letter-spacing: 1.5px; color: #c8922a; text-transform: uppercase;
+            transform: translateY(100%); transition: transform .3s cubic-bezier(.4,0,.2,1);
+        }
+        .product:hover .product-quick-add { transform: translateY(0); }
+        .badge-product {
+            position: absolute; top: 10px; left: 10px;
+            font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 2px;
+            font-family: 'Be Vietnam Pro', sans-serif !important; letter-spacing: .3px;
+        }
+        .new-badge { background: rgba(26,18,9,0.9); color: #c8922a; border: 1px solid rgba(200,146,42,0.5); }
+        .sale-badge { background: #e05a3a; color: #fff; }
+        .voucher-badge { background: #c8922a; color: #1a1209; }
+        .product-info { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+        .product-info h3 {
+            font-size: 13px; font-weight: 500; color: #d0c0a0; line-height: 1.5;
+            overflow: hidden; display: -webkit-box;
+            -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-clamp: 2;
+        }
+        .product-price { display: flex; align-items: baseline; gap: 8px; }
+        .price-now { font-size: 16px; font-weight: 700; color: #c8922a; font-family: 'Playfair Display', serif !important; }
+        .price-old { font-size: 12px; color: #4a3a28; text-decoration: line-through; }
+        .btn-cart {
+            margin-top: auto; padding: 9px; background: transparent; color: #c8922a;
+            border: 1px solid rgba(200,146,42,0.35); border-radius: 3px; cursor: pointer;
+            font-size: 11px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase;
+            transition: all .25s;
+        }
+        .btn-cart:hover { background: #c8922a; color: #1a1209; }
+        .xem-them-wrap { text-align: center; margin: 44px 0 12px; }
+        .btn-xem-them {
+            padding: 13px 52px; background: transparent;
+            border: 1px solid rgba(200,146,42,0.5); color: #c8922a;
+            font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+            border-radius: 3px; cursor: pointer; transition: all .3s;
+        }
+        .btn-xem-them:hover { background: #c8922a; color: #1a1209; }
+
+        /* ═══ PRODUCT DETAIL MODAL ═══ */
+        #product-detail-modal {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.78); z-index: 9000;
+            align-items: center; justify-content: center; padding: 16px;
+        }
+        .pd-modal {
+            background: #1c1208; border: 1px solid rgba(200,146,42,0.25);
+            border-radius: 12px; max-width: 900px; width: 100%;
+            display: flex; position: relative; max-height: 94vh; overflow-y: auto;
+            animation: pdSlideIn .28s cubic-bezier(.34,1.56,.64,1);
+        }
+        @keyframes pdSlideIn {
+            from { opacity:0; transform:translateY(24px) scale(.97); }
+            to   { opacity:1; transform:translateY(0) scale(1); }
+        }
+        .pd-close {
+            position: absolute; top: 14px; right: 16px;
+            background: rgba(200,146,42,0.1); border: 1px solid rgba(200,146,42,0.3);
+            width: 30px; height: 30px; border-radius: 50%;
+            font-size: 15px; cursor: pointer; color: #c8922a;
+            display: flex; align-items: center; justify-content: center;
+            transition: all .2s; z-index: 10;
+        }
+        .pd-close:hover { background: #c8922a; color: #1a1209; }
+        .pd-left { flex: 0 0 360px; padding: 24px 16px 24px 24px; }
+        .pd-main-img-wrap { border-radius: 8px; overflow: hidden; margin-bottom: 10px; }
+        .pd-main-img-wrap img { width: 100%; height: 390px; object-fit: cover; display: block; border-radius: 8px; transition: opacity .3s; }
+        .pd-thumbs { display: flex; gap: 8px; flex-wrap: wrap; }
+        .pd-thumb { width: 58px; height: 58px; border-radius: 6px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: border-color .2s; }
+        .pd-thumb.active { border-color: #c8922a; }
+        .pd-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .pd-right { flex: 1; padding: 28px 28px 28px 12px; display: flex; flex-direction: column; gap: 14px; }
+        .pd-status { font-size: 12px; color: #56a870; font-weight: 600; }
+        .pd-right h2 { font-size: 20px; color: #f5ede0; line-height: 1.45; margin: 0; font-weight: 600; }
+        .pd-price-row { display: flex; align-items: baseline; gap: 12px; }
+        #pd-price-now { font-size: 28px; font-weight: 700; color: #c8922a; font-family: 'Playfair Display', serif !important; }
+        #pd-price-old { font-size: 15px; color: #5a4a35; text-decoration: line-through; }
+        .pd-voucher { background: rgba(200,146,42,0.06); border: 1px dashed rgba(200,146,42,0.4); border-radius: 8px; padding: 12px 14px; }
+        .pd-voucher-title { font-size: 11px; font-weight: 700; color: #c8922a; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+        .pd-voucher-code { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #d0c0a0; }
+        .pd-voucher-copy { padding: 4px 10px; background: #c8922a; color: #1a1209; border: none; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; transition: background .2s; font-family: 'Be Vietnam Pro', sans-serif !important; }
+        .pd-voucher-copy:hover { background: #a8741a; }
+        .pd-ship { background: rgba(200,146,42,0.04); border: 1px solid rgba(200,146,42,0.15); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+        .pd-ship-row { display: flex; gap: 10px; font-size: 13px; color: #c8b88a; align-items: center; }
+        .pd-ship-label { color: #6a5a45; min-width: 80px; font-weight: 500; }
+        .pd-ship-free { color: #56a870; font-weight: 600; }
+        .pd-qty-row { display: flex; align-items: center; gap: 16px; font-size: 13px; color: #c8b88a; }
+        .pd-qty { display: flex; align-items: center; border: 1px solid rgba(200,146,42,0.3); border-radius: 6px; overflow: hidden; }
+        .pd-qty button { width: 34px; height: 34px; background: rgba(200,146,42,0.08); border: none; font-size: 18px; cursor: pointer; color: #c8922a; transition: background .2s; }
+        .pd-qty button:hover { background: rgba(200,146,42,0.2); }
+        #pd-qty-val { width: 44px; text-align: center; font-weight: 700; font-size: 15px; color: #f5ede0; }
+        #pd-stock-info { color: #6a5a45; font-size: 12px; }
+        .pd-actions { display: flex; gap: 10px; }
+        .pd-btn-cart { flex: 1; padding: 13px 8px; background: transparent; border: 2px solid #c8922a; color: #c8922a; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; }
+        .pd-btn-cart:hover { background: rgba(200,146,42,0.1); }
+        .pd-btn-buy { flex: 1; padding: 13px 8px; background: #c8922a; border: none; color: #1a1209; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .2s; }
+        .pd-btn-buy:hover { background: #a8741a; }
+        .pd-guarantees { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .pd-guarantee { display: flex; gap: 8px; align-items: flex-start; background: rgba(255,255,255,0.02); border: 1px solid rgba(200,146,42,0.1); border-radius: 8px; padding: 10px; font-size: 11px; color: #7a6a50; line-height: 1.5; }
+        .g-ico { font-size: 17px; flex-shrink: 0; }
+        .pd-support { background: rgba(200,146,42,0.08); border: 1px solid rgba(200,146,42,0.2); border-radius: 8px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; }
+        .pd-support-icon { font-size: 26px; }
+        .pd-support-text small { font-size: 11px; color: #8a7060; display: block; }
+        .pd-support-text strong { font-size: 18px; color: #c8922a; font-family: 'Playfair Display', serif !important; }
+        @media (max-width: 700px) {
+            .pd-modal { flex-direction: column; }
+            .pd-left { flex: none; padding: 16px 16px 0; }
+            .pd-right { padding: 12px 16px 20px; }
+            .pd-main-img-wrap img { height: 260px; }
+            .pd-guarantees { grid-template-columns: 1fr; }
+        }
+
+        /* ═══ POLICY MODAL ═══ */
+        #policy-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.72); z-index: 9100; align-items: center; justify-content: center; padding: 16px; }
+        .pol-box { background: #1c1208; border: 1px solid rgba(200,146,42,0.3); border-radius: 14px; max-width: 620px; width: 100%; padding: 36px; max-height: 85vh; overflow-y: auto; position: relative; animation: pdSlideIn .25s ease; }
+        .pol-box h2 { font-size: 22px; color: #f5ede0; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 2px solid rgba(200,146,42,0.4); }
+        .pol-box p { color: #a09070; line-height: 1.8; margin-bottom: 10px; font-size: 14px; }
+        .pol-box ul { color: #a09070; font-size: 14px; }
+        .pol-box li { line-height: 2; }
+        .pol-close { position: absolute; top: 14px; right: 18px; background: none; border: none; font-size: 24px; cursor: pointer; color: #6a5a45; }
+        .pol-close:hover { color: #c8922a; }
+
+        /* ═══ CART BOX ═══ */
+        .cart-box { display: none; position: fixed; right: 20px; top: 130px; background: #1c1208; color: #f5ede0; border: 1px solid rgba(200,146,42,0.35); padding: 20px; width: 300px; border-radius: 10px; box-shadow: 0 10px 36px rgba(0,0,0,0.7); z-index: 998; }
+        .cart-box ul { list-style: none; padding: 0; color: #e8d5b0; font-size: 13px; }
+
+        /* ═══ FLOAT CONTACT – ĐÃ SỬA ĐÚNG ═══ */
+        .float-contact {
+            position: fixed;
+            right: 16px;
+            bottom: 20px;
+            z-index: 8000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        .float-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: transform .25s, box-shadow .25s;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+            position: relative;
+        }
+        .float-btn:hover { transform: scale(1.14); box-shadow: 0 6px 20px rgba(0,0,0,0.55); }
+
+        /* Tooltip khi hover */
+        .float-btn::after {
+            content: attr(data-tip);
+            position: absolute;
+            right: 54px;
+            background: rgba(10,6,1,0.92);
+            color: #e8c060;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            padding: 5px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s;
+            border: 1px solid rgba(200,146,42,0.3);
+        }
+        .float-btn:hover::after { opacity: 1; }
+
+        /* ── SĐT – Xanh lá WhatsApp/Phone ── */
+        .float-btn-phone {
+            background: linear-gradient(135deg, #25d366 0%, #128c4e 100%);
+        }
+        .float-btn-phone svg { width: 22px; height: 22px; fill: white; }
+
+        /* ── Facebook – Xanh FB ── */
+        .float-btn-fb {
+            background: linear-gradient(135deg, #1877f2 0%, #0a52c4 100%);
+        }
+        .float-btn-fb svg { width: 22px; height: 22px; fill: white; }
+
+        /* ── Zalo – Xanh Zalo ── */
+        .float-btn-zalo {
+            background: linear-gradient(135deg, #0068ff 0%, #004fcc 100%);
+            color: white;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: -0.5px;
+        }
+
+        /* ═══ AI CHAT WIDGET ═══ */
+        /* Nút mở chat – góc trái */
+        .chat-fab {
+            position: fixed;
+            left: 16px;
+            bottom: 20px;
+            z-index: 8001;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c8922a 0%, #8a5e10 100%);
+            border: 2px solid rgba(200,146,42,0.5);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(200,146,42,0.5);
+            transition: all .3s;
+            animation: chatPulse 3s ease-in-out infinite;
+        }
+        .chat-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 32px rgba(200,146,42,0.7);
+        }
+        @keyframes chatPulse {
+            0%,100% { box-shadow: 0 4px 20px rgba(200,146,42,0.5); }
+            50% { box-shadow: 0 4px 28px rgba(200,146,42,0.8), 0 0 0 8px rgba(200,146,42,0.12); }
+        }
+        .chat-fab svg { width: 26px; height: 26px; fill: white; }
+
+        /* Badge chưa đọc */
+        .chat-fab-badge {
+            position: absolute;
+            top: -3px; right: -3px;
+            width: 18px; height: 18px;
+            background: #e05a3a;
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: 700;
+            color: white;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #0a0601;
+        }
+
+        /* Label nổi cạnh nút */
+        .chat-fab-label {
+            position: fixed;
+            left: 74px;
+            bottom: 34px;
+            background: rgba(26,14,4,0.97);
+            border: 1px solid rgba(200,146,42,0.4);
+            color: #e8c060;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            padding: 5px 11px;
+            border-radius: 20px;
+            white-space: nowrap;
+            z-index: 8000;
+            animation: labelPop 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes labelPop {
+            0%,80%,100% { opacity:1; transform: translateX(0); }
+            90% { opacity:0; transform: translateX(-4px); }
+        }
+
+        /* Panel chat */
+        .chat-panel {
+            display: none;
+            position: fixed;
+            left: 16px;
+            bottom: 82px;
+            z-index: 8002;
+            width: 340px;
+            max-height: 500px;
+            background: #1a1006;
+            border: 1px solid rgba(200,146,42,0.35);
+            border-radius: 16px;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.75), 0 0 0 1px rgba(200,146,42,0.08);
+            overflow: hidden;
+            flex-direction: column;
+        }
+        .chat-panel.open {
+            display: flex;
+            animation: chatOpen .32s cubic-bezier(.34,1.56,.64,1);
+        }
+        @keyframes chatOpen {
+            from { opacity:0; transform: translateY(20px) scale(.93); }
+            to   { opacity:1; transform: translateY(0) scale(1); }
+        }
+
+        /* Header chat */
+        .chat-header {
+            background: linear-gradient(135deg, #1f1409 0%, #2e1c09 100%);
+            border-bottom: 1px solid rgba(200,146,42,0.2);
+            padding: 13px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .chat-avatar {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c8922a, #7a5010);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            border: 2px solid rgba(200,146,42,0.4);
+        }
+        .chat-info { flex: 1; }
+        .chat-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #f5ede0;
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+        .chat-status {
+            font-size: 11px;
+            color: #56a870;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .chat-status::before { content: '●'; font-size: 7px; }
+        .chat-close {
+            background: rgba(200,146,42,0.1);
+            border: 1px solid rgba(200,146,42,0.25);
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            font-size: 14px;
+            cursor: pointer;
+            color: #c8922a;
+            display: flex; align-items: center; justify-content: center;
+            transition: all .2s;
+        }
+        .chat-close:hover { background: #c8922a; color: #1a1209; }
+
+        /* Messages */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 12px 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(200,146,42,0.15) transparent;
+        }
+        .chat-msg {
+            max-width: 88%;
+            padding: 9px 13px;
+            font-size: 13px;
+            line-height: 1.58;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            animation: msgIn .22s ease;
+        }
+        @keyframes msgIn {
+            from { opacity:0; transform: translateY(6px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+        .chat-msg.bot {
+            background: rgba(200,146,42,0.07);
+            border: 1px solid rgba(200,146,42,0.16);
+            color: #d4c4a0;
+            align-self: flex-start;
+            border-radius: 4px 12px 12px 12px;
+        }
+        .chat-msg.user {
+            background: linear-gradient(135deg, #a8741a, #c8922a);
+            color: #1a1209;
+            align-self: flex-end;
+            font-weight: 600;
+            border-radius: 12px 12px 4px 12px;
+        }
+
+        /* Typing dots */
+        .chat-typing {
+            display: none;
+            align-self: flex-start;
+            padding: 10px 14px;
+            background: rgba(200,146,42,0.07);
+            border: 1px solid rgba(200,146,42,0.16);
+            border-radius: 4px 12px 12px 12px;
+            align-items: center;
+            gap: 4px;
+        }
+        .chat-typing.show { display: flex; }
+        .td {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #c8922a;
+            animation: tdBounce 1.1s infinite;
+        }
+        .td:nth-child(2) { animation-delay:.18s; }
+        .td:nth-child(3) { animation-delay:.36s; }
+        @keyframes tdBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-7px)} }
+
+        /* Quick suggestions */
+        .chat-suggests {
+            padding: 6px 10px 2px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+        .cs-btn {
+            padding: 5px 10px;
+            background: rgba(200,146,42,0.06);
+            border: 1px solid rgba(200,146,42,0.22);
+            border-radius: 20px;
+            font-size: 11px;
+            color: #c8a060;
+            cursor: pointer;
+            transition: all .2s;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            white-space: nowrap;
+        }
+        .cs-btn:hover { background: rgba(200,146,42,0.18); color: #e8c060; border-color: rgba(200,146,42,0.5); }
+
+        /* Input */
+        .chat-input-row {
+            padding: 9px 10px;
+            border-top: 1px solid rgba(200,146,42,0.12);
+            display: flex;
+            gap: 7px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 9px 13px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(200,146,42,0.22);
+            border-radius: 20px;
+            color: #f5ede0;
+            font-size: 13px;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            outline: none;
+            transition: border-color .2s;
+        }
+        .chat-input:focus { border-color: rgba(200,146,42,0.5); }
+        .chat-input::placeholder { color: rgba(160,144,112,0.55); }
+        .chat-send {
+            width: 36px; height: 36px;
+            background: #c8922a;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all .2s;
+            flex-shrink: 0;
+        }
+        .chat-send:hover { background: #e8c060; transform: scale(1.08); }
+        .chat-send svg { width: 16px; height: 16px; fill: #1a1209; }
+
+        @media (max-width: 480px) {
+            .chat-panel { width: calc(100vw - 32px); }
+            .chat-fab-label { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ FLOAT CONTACT – ĐÃ SỬA: SĐT + Facebook + Zalo ═══ -->
+<div class="float-contact">
+    <!-- Nút 1: Gọi điện SĐT -->
+    <a href="tel:0944217685" class="float-btn float-btn-phone" data-tip="Gọi: 0944 217 685" title="Gọi điện">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/>
+        </svg>
+    </a>
+    <!-- Nút 2: Facebook -->
+    <a href="https://www.facebook.com/share/1JAgunUvKM/?mibextid=wwXIfr" target="_blank" class="float-btn float-btn-fb" data-tip="Facebook Shop" title="Facebook">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+    </a>
+    <!-- Nút 3: Zalo -->
+    <a href="https://zalo.me/0944217685" target="_blank" class="float-btn float-btn-zalo" data-tip="Chat Zalo" title="Zalo">
+        Zalo
+    </a>
+</div>
+
+<!-- ═══ AI CHAT WIDGET ═══ -->
+<!-- Nút mở chat -->
+<button class="chat-fab" onclick="toggleChat()" title="Chat tư vấn AI">
+    <div class="chat-fab-badge" id="chatBadge">1</div>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+    </svg>
+</button>
+<div class="chat-fab-label" id="chatLabel">💬 Hỏi tư vấn AI</div>
+
+<!-- Panel chat -->
+<div class="chat-panel" id="chatPanel">
+    <div class="chat-header">
+        <div class="chat-avatar">🛍️</div>
+        <div class="chat-info">
+            <div class="chat-name">Shop Assistant AI</div>
+            <div class="chat-status">Đang hoạt động</div>
+        </div>
+        <button class="chat-close" onclick="toggleChat()">✕</button>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+        <!-- Tin nhắn chào mừng sẽ được thêm bằng JS -->
+    </div>
+
+    <div class="chat-typing" id="chatTyping">
+        <div class="td"></div><div class="td"></div><div class="td"></div>
+    </div>
+
+    <div class="chat-suggests" id="chatSuggests">
+        <button class="cs-btn" onclick="sendSuggest(this)">📦 Chính sách đổi trả</button>
+        <button class="cs-btn" onclick="sendSuggest(this)">📏 Hướng dẫn chọn size</button>
+        <button class="cs-btn" onclick="sendSuggest(this)">💰 Giá cả & ưu đãi</button>
+        <button class="cs-btn" onclick="sendSuggest(this)">🔄 Thu mua đồ cũ</button>
+        <button class="cs-btn" onclick="sendSuggest(this)">🚚 Giao hàng freeship</button>
+        <button class="cs-btn" onclick="sendSuggest(this)">👕 Gợi ý trang phục</button>
+    </div>
+
+    <div class="chat-input-row">
+        <input class="chat-input" id="chatInput" type="text" placeholder="Nhắn hỏi về sản phẩm, chính sách..." onkeypress="if(event.key==='Enter')sendChat()">
+        <button class="chat-send" onclick="sendChat()">
+            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+    </div>
+</div>
+
+<!-- PROMO BAR -->
+<div class="promo-bar">
+    <div class="promo-bar-track">
+        <span><span class="icon">⚡</span>CHÀO HÈ MAX LẠNH – ƯU ĐÃI 20% LIST SẢN PHẨM ĐỒ HÈ</span>
+        <span><span class="icon">🔥</span>Nhập mã APR60 GIẢM 60K đơn từ 799K</span>
+        <span><span class="icon">🔥</span>Nhập mã APR90 GIẢM 90K đơn từ 1099K</span>
+        <span><span class="icon">🚚</span>Freeship đơn từ 399K</span>
+        <span><span class="icon">⚡</span>CHÀO HÈ MAX LẠNH – ƯU ĐÃI 20% LIST SẢN PHẨM ĐỒ HÈ</span>
+        <span><span class="icon">🔥</span>Nhập mã APR60 GIẢM 60K đơn từ 799K</span>
+        <span><span class="icon">🔥</span>Nhập mã APR90 GIẢM 90K đơn từ 1099K</span>
+        <span><span class="icon">🚚</span>Freeship đơn từ 399K</span>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header id="main-header">
+    <a href="trangchu.html" class="header-logo-text">
+        SHOP<br>
+        <small style="font-size:10px;letter-spacing:4px;color:#8a6a30;font-family:'Be Vietnam Pro',sans-serif;font-weight:300;">SECONDHAND</small>
+    </a>
+    <div class="header-search">
+        <input type="text" id="search" placeholder="Tìm kiếm sản phẩm...">
+        <button onclick="searchProduct()">🔍</button>
+    </div>
+    <div class="header-actions">
+        <a href="trangchu.html" class="header-action-item">
+            <span class="action-icon">📍</span><span>Trang chủ</span>
+        </a>
+        <button class="header-action-item" id="btn-login" onclick="window.location.href='dangnhap.html'">
+            <span class="action-icon">👤</span><span>Đăng nhập</span>
+        </button>
+        <button class="header-action-item" id="btn-register" onclick="window.location.href='dangnhap.html?tab=register'">
+            <span class="action-icon">📝</span><span>Đăng ký</span>
+        </button>
+        <button class="header-action-item" onclick="showCart()">
+            <div class="cart-icon-wrap">
+                <span class="action-icon">🛒</span>
+                <span class="cart-badge" id="cartCount">0</span>
+            </div>
+            <span>Giỏ hàng</span>
+        </button>
+    </div>
+</header>
+
+<!-- CATEGORY MENU -->
+<nav class="category-menu" id="main-nav">
+    <ul>
+        <li>
+            <a href="#" onclick="filterAndScroll('all');return false;">
+                🔎 HÀNG MỚI<span class="badge-new">new</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">SẢN PHẨM <span class="arrow">▾</span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#" onclick="filterAndScroll('all');return false;">Tất cả</a></li>
+                <li><a href="#" onclick="filterAndScroll('all');return false;">Best seller</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">ÁO NAM <span class="arrow">▾</span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#" onclick="filterAndScroll('aothun');return false;">Áo thun</a></li>
+                <li><a href="#" onclick="filterAndScroll('aosomi');return false;">Áo sơ mi</a></li>
+                <li><a href="#" onclick="filterAndScroll('hoodie');return false;">Áo hoodie</a></li>
+                <li><a href="#" onclick="filterAndScroll('aokhoac');return false;">Áo khoác</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">QUẦN NAM <span class="arrow">▾</span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#" onclick="filterAndScroll('quanjean');return false;">Quần jean</a></li>
+                <li><a href="#" onclick="filterAndScroll('quankaki');return false;">Quần kaki</a></li>
+                <li><a href="#" onclick="filterAndScroll('quantay');return false;">Quần tây</a></li>
+                <li><a href="#" onclick="filterAndScroll('quanshort');return false;">Quần short</a></li>
+                <li><a href="#" onclick="filterAndScroll('quanjogger');return false;">Quần jogger</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">PHỤ KIỆN <span class="arrow">▾</span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#" onclick="filterAndScroll('giay');return false;">Giày</a></li>
+                <li><a href="#" onclick="filterAndScroll('phukien');return false;">Mũ nón</a></li>
+                <li><a href="#" onclick="filterAndScroll('phukien');return false;">Túi xách</a></li>
+                <li><a href="#" onclick="filterAndScroll('phukien');return false;">Thắt lưng</a></li>
+            </ul>
+        </li>
+        <li><a href="#" onclick="filterAndScroll('quanshort');return false;">🏖️ ĐỒ HÈ</a></li>
+        <li><a href="#" onclick="filterAndScroll('all');return false;"><span class="badge-sale">-50%</span> OUTLET</a></li>
+        <li>
+            <a href="#">COLLECTION <span class="arrow">▾</span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#" onclick="filterAndScroll('aothun');return false;">Summer 2025</a></li>
+                <li><a href="#" onclick="filterAndScroll('hoodie');return false;">Limited Edition</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">JEANS <span class="arrow">▾</span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#" onclick="filterAndScroll('quanjean');return false;">Slim fit</a></li>
+                <li><a href="#" onclick="filterAndScroll('quanjean');return false;">Straight</a></li>
+                <li><a href="#" onclick="filterAndScroll('quanjean');return false;">Oversize</a></li>
+            </ul>
+        </li>
+        <li class="thu-mua-item">
+            <a href="thumua.html">THU MUA</a>
+        </li>
+    </ul>
+</nav>
+
+<!-- BANNER SLIDER -->
+<section class="banner-slider">
+    <div class="slide active" style="background-image:linear-gradient(rgba(10,7,2,0.42),rgba(10,7,2,0.52)),url('images/anhnen3.jpg')">
+        <div class="slide-text">
+            <p class="slide-sub">BỘ SƯU TẬP MỚI</p>
+            <h2>KHÁM PHÁ<br><span>OUTFIT NGÀY HÈ</span></h2>
+            <button onclick="document.querySelector('.products-section').scrollIntoView({behavior:'smooth'})">Mua ngay</button>
+        </div>
+    </div>
+    <div class="slide" style="background-image:linear-gradient(rgba(10,7,2,0.42),rgba(10,7,2,0.52)),url('images/anhnen2.jpg')">
+        <div class="slide-text">
+            <p class="slide-sub">SECONDHAND FASHION</p>
+            <h2>THỜI TRANG<br><span>CHẤT LƯỢNG</span></h2>
+            <button onclick="document.querySelector('.products-section').scrollIntoView({behavior:'smooth'})">Xem ngay</button>
+        </div>
+    </div>
+    <div class="slide" style="background-image:linear-gradient(rgba(10,7,2,0.42),rgba(10,7,2,0.52)),url('images/anhnen1.jpg')">
+        <div class="slide-text">
+            <p class="slide-sub">GIÁ SINH VIÊN</p>
+            <h2>SALE UP TO<br><span>50% OFF</span></h2>
+            <button onclick="document.querySelector('.products-section').scrollIntoView({behavior:'smooth'})">Xem ưu đãi</button>
+        </div>
+    </div>
+    <button class="slide-btn prev" onclick="changeSlide(-1)">&#10094;</button>
+    <button class="slide-btn next" onclick="changeSlide(1)">&#10095;</button>
+    <div class="slide-dots">
+        <span class="dot active" onclick="goSlide(0)"></span>
+        <span class="dot" onclick="goSlide(1)"></span>
+        <span class="dot" onclick="goSlide(2)"></span>
+    </div>
+</section>
+
+<!-- ICON CATEGORY -->
+<section class="icon-cats">
+    <button class="icon-cat" onclick="filterAndScroll('aothun')">
+        <div class="icon-cat-img">
+            <svg viewBox="0 0 64 64" fill="none"><path d="M20 10L8 22l8 3v21h32V25l8-3L44 10l-5.5 5.5C37 17 34.6 18 32 18s-5-1-6.5-2.5L20 10z" fill="#c8922a" opacity=".85"/><path d="M26 15.5L20 10M44 10l-6 5.5" stroke="#e8c060" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <span>Áo</span>
+    </button>
+    <button class="icon-cat" onclick="filterAndScroll('quanjean')">
+        <div class="icon-cat-img">
+            <svg viewBox="0 0 64 64" fill="none"><path d="M14 12h36l-4 30-8 2-6-9-6 9-8-2L14 12z" fill="#4a7ecb" opacity=".9"/><path d="M18 20h28M14 12h36" stroke="#6a9ee8" stroke-width="1.5" stroke-linecap="round"/><path d="M26 32v10M38 32v10" stroke="#3a6eb8" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <span>Quần</span>
+    </button>
+    <button class="icon-cat" onclick="filterAndScroll('phukien')">
+        <div class="icon-cat-img">
+            <svg viewBox="0 0 64 64" fill="none"><ellipse cx="32" cy="40" rx="22" ry="7" fill="#c8922a" opacity=".75"/><path d="M10 40 Q10 24 32 22 Q54 24 54 40" fill="#e8c060" opacity=".88"/><rect x="10" y="37" width="44" height="6" rx="3" fill="#c8922a" opacity=".9"/><path d="M24 22 Q32 15 40 22" stroke="#e8c060" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        </div>
+        <span>Phụ Kiện</span>
+    </button>
+    <button class="icon-cat" onclick="filterAndScroll('giay')">
+        <div class="icon-cat-img">
+            <svg viewBox="0 0 64 64" fill="none"><path d="M8 46 Q10 36 22 34 Q32 32 40 28 Q48 24 56 32L56 46 Q48 52 32 52 Q14 52 8 46z" fill="#c8a060" opacity=".9"/><path d="M8 46 Q12 38 26 36" stroke="#e8c060" stroke-width="1.5" stroke-linecap="round"/><path d="M32 30 L40 26" stroke="#a07840" stroke-width="1.5" stroke-linecap="round"/><path d="M38 34 L46 30" stroke="#a07840" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <span>Giày</span>
+    </button>
+</section>
+
+<!-- PRODUCTS SECTION -->
+<section class="products-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>SẢN PHẨM NỔI BẬT</h2>
+            <div class="title-rule"></div>
+        </div>
+        <div class="sort-bar">
+            <div class="sort-bar-left">
+                <span>Sắp xếp:</span>
+                <select onchange="sortProducts(this.value)">
+                    <option value="default">Nổi bật</option>
+                    <option value="asc">Giá thấp → cao</option>
+                    <option value="desc">Giá cao → thấp</option>
+                </select>
+            </div>
+            <span id="product-count" style="font-size:12px;color:#6a5a45;"></span>
+        </div>
+        <div class="products" id="productGrid"></div>
+        <div class="xem-them-wrap">
+            <button class="btn-xem-them" onclick="xemThem()">Xem thêm sản phẩm</button>
+        </div>
+    </div>
+</section>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div id="product-detail-modal" onclick="closeProductModal()">
+    <div class="pd-modal" onclick="event.stopPropagation()">
+        <button class="pd-close" onclick="closeProductModal()">✕</button>
+        <div class="pd-left">
+            <div class="pd-main-img-wrap"><img id="pd-main-img" src="" alt="Sản phẩm"></div>
+            <div class="pd-thumbs" id="pd-thumbs"></div>
+        </div>
+        <div class="pd-right">
+            <div class="pd-status">● Còn hàng</div>
+            <h2 id="pd-name"></h2>
+            <div class="pd-price-row">
+                <span id="pd-price-now"></span>
+                <span id="pd-price-old"></span>
+            </div>
+            <div class="pd-voucher">
+                <div class="pd-voucher-title">🎁 Code Ưu Đãi</div>
+                <div class="pd-voucher-code">
+                    <span>Nhập mã <strong style="color:#c8922a;">APR60</strong> freeship đơn từ 799K</span>
+                    <button class="pd-voucher-copy" onclick="copyCode('APR60')">Sao chép</button>
+                </div>
+            </div>
+            <div class="pd-ship">
+                <div class="pd-ship-row"><span class="pd-ship-label">Vận chuyển:</span><span>Từ Hồ Chí Minh</span></div>
+                <div class="pd-ship-row"><span class="pd-ship-free">🚚 Miễn phí vận chuyển</span></div>
+            </div>
+            <div class="pd-qty-row">
+                <span>Số lượng:</span>
+                <div class="pd-qty">
+                    <button onclick="changeQty(-1)">−</button>
+                    <span id="pd-qty-val">1</span>
+                    <button onclick="changeQty(1)">+</button>
+                </div>
+                <span id="pd-stock-info"></span>
+            </div>
+            <div class="pd-actions">
+                <button class="pd-btn-cart" id="pd-btn-cart">🛒 Thêm vào giỏ</button>
+                <button class="pd-btn-buy" id="pd-btn-buy">Mua ngay</button>
+            </div>
+            <div class="pd-guarantees">
+                <div class="pd-guarantee"><span class="g-ico">🛡️</span><span>Sản phẩm chất lượng, đúng mô tả</span></div>
+                <div class="pd-guarantee"><span class="g-ico">🔄</span><span>Đổi trả trong 7 ngày nếu lỗi</span></div>
+                <div class="pd-guarantee"><span class="g-ico">👥</span><span>Nhân viên tư vấn nhiệt tình</span></div>
+                <div class="pd-guarantee"><span class="g-ico">🚀</span><span>Giao hàng nhanh toàn quốc</span></div>
+            </div>
+            <div class="pd-support">
+                <div class="pd-support-icon">🎧</div>
+                <div class="pd-support-text">
+                    <small>Hỗ trợ mua hàng</small>
+                    <strong>0944 217 685</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- POLICY MODAL -->
+<div id="policy-modal" onclick="closePolicy()">
+    <div class="pol-box" onclick="event.stopPropagation()">
+        <button class="pol-close" onclick="closePolicy()">✕</button>
+        <h2 id="policy-title"></h2>
+        <div id="policy-body"></div>
+    </div>
+</div>
+
+<!-- CART BOX -->
+<div id="cartBox" class="cart-box">
+    <h3 style="color:#c8922a;font-family:'Playfair Display',serif;margin-bottom:12px;font-size:18px;">🛒 Giỏ hàng</h3>
+    <ul id="cartItems"></ul>
+    <p style="margin-top:12px;border-top:1px solid rgba(200,146,42,0.3);padding-top:10px;">
+        <b style="color:#c8922a;">Tổng tiền:</b>
+        <span id="totalPrice" style="color:#f5ede0;font-weight:700;">0</span> đ
+    </p>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+        <button onclick="goCheckout()" style="flex:1;padding:10px;background:#c8922a;color:#1a1209;border:none;border-radius:4px;font-weight:700;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;">Đặt hàng</button>
+        <button onclick="closeCart()" style="flex:1;padding:10px;background:transparent;color:#c8922a;border:1px solid rgba(200,146,42,0.4);border-radius:4px;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;">Đóng</button>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-subscribe">
+        <span>ĐĂNG KÍ NHẬN TIN</span>
+        <div class="subscribe-form">
+            <input type="email" id="subscribe-email" placeholder="✉ Nhập email của bạn">
+            <button onclick="subscribeEmail()">✈ ĐĂNG KÝ</button>
+        </div>
+        <div class="footer-social">
+            <a href="https://zalo.me/0944217685" target="_blank" title="Zalo">💬</a>
+            <a href="https://instagram.com/regal_thrift.str" target="_blank" title="Instagram">📷</a>
+            <a href="https://www.facebook.com/share/1JAgunUvKM/?mibextid=wwXIfr" target="_blank" title="Facebook">📘</a>
+        </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-cols">
+        <div class="footer-col">
+            <h4>GIỚI THIỆU</h4>
+            <p>SHOP SECONDHAND – Thời Trang Nam Chuẩn Hiệu</p>
+            <p>📞 0944 217 685</p>
+            <p>✉ cs@shopsecondhand.com</p>
+            <p>🕐 Giờ mở cửa: 08:30 – 22:00</p>
+        </div>
+        <div class="footer-col">
+            <h4>CHÍNH SÁCH</h4>
+            <ul>
+                <li><a href="#" onclick="openPolicy('dat-hang');return false;">Hướng dẫn đặt hàng</a></li>
+                <li><a href="#" onclick="openPolicy('doi-tra');return false;">Chính sách đổi trả</a></li>
+                <li><a href="#" onclick="openPolicy('bao-mat');return false;">Chính sách bảo mật</a></li>
+                <li><a href="#" onclick="openPolicy('dieu-khoan');return false;">Điều khoản sử dụng</a></li>
+                <li><a href="#" onclick="openPolicy('chon-size');return false;">Hướng dẫn chọn size</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>ĐỊA CHỈ CỬA HÀNG</h4>
+            <ul class="address-list">
+                <li><strong>📍 HỒ CHÍ MINH</strong><span>Số 56 Lê Văn Phan, Phú Thọ Hòa, Tân Phú</span></li>
+                <li><strong>📍 HỒ CHÍ MINH</strong><span>Số 363 Phạm Văn Bạch, Sơn Kì, Tân Bình</span></li>
+                <li><strong>📍 HỒ CHÍ MINH</strong><span>Số 143 Phan Anh, Bình Trị Đông, Bình Tân</span></li>
+            </ul>
+            <a href="diachi.html" class="xem-tat-ca">XEM TẤT CẢ CỬA HÀNG ›</a>
+        </div>
+        <div class="footer-col">
+            <h4>THANH TOÁN</h4>
+            <div class="payment-methods">
+                <span class="pay-badge">ShopeePay</span>
+                <span class="pay-badge">VNPay</span>
+                <span class="pay-badge">COD</span>
+                <span class="pay-badge">Momo</span>
+                <span class="pay-badge">ZaloPay</span>
+                <span class="pay-badge">Thẻ ATM</span>
+            </div>
+            <div class="footer-trust" style="margin-top:20px;">
+                <div class="trust-badge">✅ ĐÃ THÔNG BÁO<br><small>BỘ CÔNG THƯƠNG</small></div>
+                <div class="trust-badge">🛡 DMCA<br><small>PROTECTED</small></div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-divider"></div>
+    <p class="footer-copy">© 2026 Shop Secondhand. All rights reserved.</p>
+</footer>
+
+<script src="js/java.js"></script>
+<script>
+/* ── SMOOTH HEADER HIDE/SHOW ── */
+(function(){
+    const header = document.getElementById('main-header');
+    const nav    = document.getElementById('main-nav');
+    if(!header||!nav) return;
+    let lastY=0, ticking=false;
+    function syncNav(){ nav.style.top = header.offsetHeight+'px'; }
+    syncNav();
+    window.addEventListener('resize', syncNav);
+    window.addEventListener('scroll',()=>{
+        if(!ticking){
+            requestAnimationFrame(()=>{
+                const cur=window.scrollY, diff=cur-lastY;
+                if(cur<80){
+                    header.style.transform='translateY(0)';
+                    nav.style.transform='translateY(0)';
+                } else if(diff>5){
+                    header.style.transform='translateY(-100%)';
+                    nav.style.transform=`translateY(calc(-100% - ${header.offsetHeight}px))`;
+                } else if(diff<-5){
+                    header.style.transform='translateY(0)';
+                    nav.style.transform='translateY(0)';
+                }
+                lastY=cur; ticking=false;
+            });
+            ticking=true;
+        }
+    },{passive:true});
+})();
+
+function filterAndScroll(cat){
+    filter(cat);
+    setTimeout(()=>document.querySelector('.products-section').scrollIntoView({behavior:'smooth'}),80);
+}
+function copyCode(code){
+    navigator.clipboard ? navigator.clipboard.writeText(code).then(()=>showToast('✅ Đã sao chép mã: '+code)) : showToast('✅ Mã: '+code);
+}
+window.openAuth = function(mode){
+    window.location.href='dangnhap.html'+(mode==='register'?'?tab=register':'');
+};
+function goCheckout(){
+    if(!cart.length){ showToast('⚠️ Giỏ hàng đang trống!'); return; }
+    const isLogin=localStorage.getItem('isLogin')||localStorage.getItem('sh_current');
+    if(!isLogin){
+        if(confirm('Vui lòng đăng nhập để đặt hàng. Đăng nhập ngay?')) window.location.href='dangnhap.html';
+        return;
+    }
+    localStorage.setItem('sh_cart', JSON.stringify({items:cart,total:total}));
+    window.location.href='thanhtoan.html';
+}
+window.createProductCard = function(p){
+    const oldP = p.oldPrice ? `<span class="price-old">${p.oldPrice.toLocaleString('vi-VN')}đ</span>` : '';
+    const bc = (b)=>{ if(b.includes('Mới')) return 'new-badge'; if(b.includes('Sale')) return 'sale-badge'; return 'voucher-badge'; };
+    return `<div class="product" onclick="openProductModal(${p.id})">
+      <div class="product-img-wrap">
+        <img src="${p.img}" alt="${p.name}" loading="lazy">
+        <span class="badge-product ${bc(p.badge)}">${p.badge}</span>
+        <div class="product-quick-add" onclick="event.stopPropagation();addToCart('${p.name.replace(/'/g,"\\'")}',${p.price})">🛒 Thêm nhanh vào giỏ</div>
+      </div>
+      <div class="product-info">
+        <h3>${p.name}</h3>
+        <div class="product-price">
+          <span class="price-now">${p.price.toLocaleString('vi-VN')}đ</span>${oldP}
+        </div>
+        <button class="btn-cart" onclick="event.stopPropagation();addToCart('${p.name.replace(/'/g,"\\'")}',${p.price})">Thêm vào giỏ</button>
+      </div>
+    </div>`;
+};
+const _origOpen = window.openProductModal;
+window.openProductModal = function(id){
+    _origOpen && _origOpen(id);
+    const p = allProducts.find(x=>x.id===id);
+    if(!p) return;
+    const seeds = [p.img,
+        p.img.replace(/\/seed\/(\w+)\//,'\/seed\/$1a\/'),
+        p.img.replace(/\/seed\/(\w+)\//,'\/seed\/$1b\/'),
+        p.img.replace(/\/seed\/(\w+)\//,'\/seed\/$1c\/')
+    ];
+    document.getElementById('pd-thumbs').innerHTML = seeds.map((s,i)=>
+        `<div class="pd-thumb ${i===0?'active':''}" onclick="switchThumb(this,'${s}')"><img src="${s}" loading="lazy"></div>`
+    ).join('');
+};
+function switchThumb(el,src){
+    document.querySelectorAll('.pd-thumb').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('pd-main-img').src=src;
+}
+const _origRender = window.renderProducts;
+window.renderProducts = function(){
+    _origRender && _origRender();
+    let list=[...allProducts];
+    if(currentFilter!=='all') list=list.filter(p=>p.category===currentFilter);
+    const shown=Math.min(displayCount,list.length);
+    const el=document.getElementById('product-count');
+    if(el) el.textContent=`Hiển thị ${shown} / ${list.length} sản phẩm`;
+};
+window.addEventListener('DOMContentLoaded',()=>{
+    const cur=JSON.parse(localStorage.getItem('sh_current')||'null');
+    if(cur){
+        const btnL=document.getElementById('btn-login');
+        const btnR=document.getElementById('btn-register');
+        if(btnL){ btnL.innerHTML=`<span class="action-icon">👤</span><span>${cur.name}</span>`; btnL.onclick=()=>{ if(confirm('Đăng xuất?')){ localStorage.removeItem('sh_current'); localStorage.removeItem('isLogin'); location.reload(); } }; }
+        if(btnR) btnR.style.display='none';
+    }
+    const s=document.getElementById('search');
+    if(s) s.addEventListener('keypress',e=>{if(e.key==='Enter') searchProduct();});
+
+    // Khởi tạo chat widget
+    initChat();
+});
+
+/* ═══════════════════════════════════════════════
+   AI CHAT WIDGET – Tư vấn thông minh
+   Dùng Anthropic API để trả lời về shop
+═══════════════════════════════════════════════ */
+let chatOpen = false;
+let chatHistory = [];
+
+const SHOP_SYSTEM_PROMPT = `Bạn là trợ lý tư vấn AI của Shop SecondHand – cửa hàng thời trang nam secondhand tại TP.HCM.
+
+THÔNG TIN SHOP:
+- Tên: Shop SecondHand
+- ĐT: 0944 217 685 | Email: cs@shopsecondhand.com
+- Giờ mở cửa: 08:30 – 22:00 hàng ngày
+- 3 chi nhánh tại HCM: Tân Phú, Tân Bình, Bình Tân
+
+SẢN PHẨM:
+- Áo nam (thun, sơ mi, hoodie, khoác), Quần nam (jean, kaki, tây, short, jogger)
+- Giày, phụ kiện (mũ, túi, thắt lưng)
+- Hàng secondhand chất lượng, được tuyển chọn kỹ
+
+BẢNG SIZE (Nam):
+- S: Cao 160-165cm, nặng 50-55kg
+- M: Cao 165-170cm, nặng 55-62kg  
+- L: Cao 170-175cm, nặng 62-70kg
+- XL: Cao 175-180cm, nặng 70-78kg
+- XXL: Cao 180-185cm, nặng 78-88kg
+
+CHÍNH SÁCH:
+- Đổi trả: 7 ngày nếu lỗi từ shop, sản phẩm còn nguyên tag
+- Freeship: Đơn từ 399K
+- Mã giảm giá: APR60 (giảm 60K đơn từ 799K), APR90 (giảm 90K đơn từ 1.099K)
+- Thanh toán: COD, VNPay, Momo, ZaloPay, ShopeePay, Thẻ ATM
+
+THU MUA ĐỒ CŨ:
+- Shop thu mua quần áo nam secondhand còn đẹp
+- Điều kiện: Còn ≥70% chất lượng, không rách/bẩn nặng, hàng hiệu/thương hiệu ưu tiên
+- Mang đến cửa hàng hoặc gửi ảnh qua Zalo để được định giá
+- Giá thu: 20-60% giá trị thực tùy tình trạng và thương hiệu
+
+PHONG CÁCH TRẢ LỜI:
+- Thân thiện, ngắn gọn, xúc tích
+- Trả lời bằng tiếng Việt
+- Đưa ra gợi ý cụ thể khi khách hỏi về trang phục
+- Nếu không biết thông tin cụ thể (như giá sản phẩm cụ thể), hướng khách liên hệ 0944 217 685`;
+
+function initChat() {
+    addBotMsg('Xin chào! 👋 Mình là trợ lý AI của Shop SecondHand.\n\nMình có thể giúp bạn về chính sách đổi trả, hướng dẫn chọn size, giá cả, thu mua đồ cũ hoặc gợi ý trang phục. Bạn cần hỏi gì không?');
+}
+
+function toggleChat() {
+    const panel = document.getElementById('chatPanel');
+    const label = document.getElementById('chatLabel');
+    const badge = document.getElementById('chatBadge');
+    chatOpen = !chatOpen;
+    if (chatOpen) {
+        panel.classList.add('open');
+        if (label) label.style.display = 'none';
+        if (badge) badge.style.display = 'none';
+        setTimeout(() => {
+            const msgs = document.getElementById('chatMessages');
+            if (msgs) msgs.scrollTop = msgs.scrollHeight;
+            document.getElementById('chatInput').focus();
+        }, 100);
+    } else {
+        panel.classList.remove('open');
+        if (label) label.style.display = 'block';
+    }
+}
+
+function addBotMsg(text) {
+    const msgs = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = 'chat-msg bot';
+    div.innerHTML = text.replace(/\n/g, '<br>');
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+function addUserMsg(text) {
+    const msgs = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = 'chat-msg user';
+    div.textContent = text;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping(show) {
+    document.getElementById('chatTyping').className = 'chat-typing' + (show ? ' show' : '');
+    if (show) {
+        const msgs = document.getElementById('chatMessages');
+        msgs.scrollTop = msgs.scrollHeight;
+    }
+}
+
+function sendSuggest(btn) {
+    const text = btn.textContent.replace(/^[^\s]+ /, ''); // bỏ icon
+    document.getElementById('chatInput').value = btn.textContent;
+    sendChat();
+}
+
+async function sendChat() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    input.value = '';
+    addUserMsg(text);
+    
+    // Ẩn suggests sau khi gửi tin đầu
+    const suggests = document.getElementById('chatSuggests');
+    if (suggests) suggests.style.display = 'none';
+
+    chatHistory.push({ role: 'user', content: text });
+    showTyping(true);
+
+    try {
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: 'claude-sonnet-4-20250514',
+                max_tokens: 1000,
+                system: SHOP_SYSTEM_PROMPT,
+                messages: chatHistory
+            })
+        });
+
+        const data = await response.json();
+        showTyping(false);
+
+        if (data.content && data.content[0]) {
+            const reply = data.content[0].text;
+            chatHistory.push({ role: 'assistant', content: reply });
+            addBotMsg(reply);
+        } else {
+            addBotMsg('Xin lỗi, mình gặp lỗi kỹ thuật. Vui lòng liên hệ trực tiếp: 📞 0944 217 685');
+        }
+    } catch (err) {
+        showTyping(false);
+        addBotMsg('Không kết nối được. Vui lòng liên hệ: 📞 <strong style="color:#c8922a;">0944 217 685</strong> hoặc chat Zalo để được hỗ trợ nhé!');
+    }
+}
+</script>
+</body>
+</html>
